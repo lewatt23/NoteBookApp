@@ -1,1 +1,6 @@
-{}
+{
+  "Navigation": {
+    "NotesStack": "Notes",
+    "NoteBookStack": "Carnet de notes"
+  }
+}
