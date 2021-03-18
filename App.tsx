@@ -10,12 +10,16 @@ import {localeValue} from './src/config/i18n';
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 enableScreens();
+
 const AppT = () => {
   return (
     <SafeAreaProvider>
       <GlobalizeProvider locale={localeValue()} currency="XOF">
         <Fragment>
-          <StatusBar barStyle="light-content" backgroundColor={colors.black} />
+          <StatusBar
+            barStyle="dark-content"
+            backgroundColor={colors.backgroundColor}
+          />
 
           <AppNavigationContainer />
         </Fragment>
