@@ -5,13 +5,20 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {RootStackRouteList, RootStackParamList} from './constant.navigation';
 
 import {HomeBottomTab} from './homeBottomTab';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
+import colors from '../utils/colors';
 
 const StackNavigator = createStackNavigator<RootStackParamList>();
-
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: colors.backgroundColor,
+  },
+};
 const AppNavigationContainer = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={MyTheme}>
       <StackNavigator.Navigator
         initialRouteName={RootStackRouteList.HomeBottomTab}>
         <StackNavigator.Screen

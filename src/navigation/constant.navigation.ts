@@ -12,6 +12,7 @@ export type RootStackParamList = {
 export type HomeBottomTabParamList = {
   NoteBookStack: undefined;
   NotesStack: undefined;
+  CreatScreen: undefined;
 };
 
 export const RootStackRouteList: NavigatorRouteList<RootStackParamList> = {
@@ -21,4 +22,5 @@ export const RootStackRouteList: NavigatorRouteList<RootStackParamList> = {
 export const HomeBottomTabRouteList: NavigatorRouteList<HomeBottomTabParamList> = {
   NoteBookStack: 'NoteBookStack',
   NotesStack: 'NotesStack',
+  CreatScreen: 'CreatScreen',
 };
