@@ -3,7 +3,7 @@
  */
 
 export default {
-  primary: '#c7932e',
+  primary: '#46c6eb',
   primaryLight: '#75a5ee',
   secondary: '#ffe297',
   tertiary: '#AAD23A',
@@ -11,14 +11,14 @@ export default {
   white: '#fff',
   whiteTransparent: 'rgba(255, 255, 255, 0.8)',
   transparent: 'rgba(0, 0, 0, 0.25)',
-  black: '#111111',
+  black: '#070417',
   grayLight: '#aeaaaa',
   graySecondary: '#666',
   gray: '#f9f9f9',
   grayLightsecondary: '#ececec',
   error: '#BD171A',
   success: '#4caf50',
-  backgroundColor: '#fafafa',
+  backgroundColor: '#fafaff',
   tagPrimary: '#079a86',
   tagSecondary: '#ffb92d',
   tagTertiary: '#e24c4b',
