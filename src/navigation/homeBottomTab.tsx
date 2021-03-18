@@ -8,62 +8,98 @@ import {
   HomeBottomTabParamList,
   HomeBottomTabRouteList,
 } from './constant.navigation';
-import {useGlobalize} from 'react-native-globalize';
 import {NotesStack} from '../screens/Notes';
 import {NoteBookStack} from '../screens/NoteBook';
+import {Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {NoteBookStackRouteList} from '../screens/NoteBook/constant';
 
 const IconNameStackMap: {[index in keyof HomeBottomTabParamList]: string} = {
-  [HomeBottomTabRouteList.NotesStack]: 'earth',
-  [HomeBottomTabRouteList.NoteBookStack]: 'chatbubbles',
+  [HomeBottomTabRouteList.NotesStack]: 'file-tray-full',
+  [HomeBottomTabRouteList.CreatScreen]: 'add-circle',
+  [HomeBottomTabRouteList.NoteBookStack]: 'journal',
 };
 
 const TabBottomNavigator = createBottomTabNavigator<HomeBottomTabParamList>();
 
 export const HomeBottomTab = () => {
-  const {formatMessage} = useGlobalize();
-
+  const navigations = useNavigation();
   return (
     <TabBottomNavigator.Navigator
       tabBarOptions={{
-        activeTintColor: colors.primary,
-        inactiveTintColor: colors.white,
+        activeTintColor: colors.black,
+        inactiveTintColor: colors.grayLight,
         labelStyle: {
           fontFamily: 'Raleway-SemiBold',
         },
+        showLabel: false,
         style: {
-          backgroundColor: colors.black,
+          backgroundColor: colors.white,
           paddingTop: 5,
           paddingBottom: 4,
-          borderWidth: 0,
-
-          elevation: 0,
-          borderTopWidth: 0,
+          borderWidth: 1,
+          borderColor: colors.white,
+          borderTopStartRadius: 35,
+          borderTopEndRadius: 35,
+          elevation: 5,
+          height: 70,
         },
       }}
       screenOptions={({route}) => ({
-        tabBarLabel: formatMessage(`Navigation/${route.name}`),
-
+        tabBarLabel: '',
         tabBarIcon: ({focused, color}) => {
           let icon =
             IconNameStackMap[route.name as keyof HomeBottomTabParamList];
-
+          if (route.name === HomeBottomTabRouteList.CreatScreen) {
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  navigations.navigate(NoteBookStackRouteList.NoteBookAdd);
+                }}>
+                <Image
+                  style={styles.image}
+                  source={require('../assets/add.png')}
+                />
+              </TouchableOpacity>
+            );
+          }
           return (
             <Icon
               name={focused ? icon : icon + '-outline'}
               color={color}
-              size={18}
+              size={24}
             />
           );
         },
       })}>
       <TabBottomNavigator.Screen
         name={HomeBottomTabRouteList.NoteBookStack}
+        options={(navigation: any) => ({
+          tabBarVisible: navigation.route?.state?.index > 0 ? false : true,
+        })}
+        component={NoteBookStack}
+      />
+      <TabBottomNavigator.Screen
+        name={HomeBottomTabRouteList.CreatScreen}
+        options={(navigation: any) => ({
+          tabBarVisible: navigation.route?.state?.index > 0 ? false : true,
+        })}
         component={NoteBookStack}
       />
       <TabBottomNavigator.Screen
         name={HomeBottomTabRouteList.NotesStack}
+        options={(navigation: any) => ({
+          tabBarVisible: navigation.route?.state?.index > 0 ? false : true,
+        })}
         component={NotesStack}
       />
     </TabBottomNavigator.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  image: {
+    height: 50,
+    width: 50,
+  },
+});

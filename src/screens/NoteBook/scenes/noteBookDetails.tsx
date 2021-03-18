@@ -1,47 +1,29 @@
 import React, {FunctionComponent} from 'react';
 
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import colors from '../../../utils/colors';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {NoteBookStackParamList, NoteBookStackRouteList} from '../constant';
 import {RouteProp} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/Ionicons';
 import {NoteBookCard} from '../../../components/noteBookCard';
+import {Card, TagEnum} from '../component/card';
 
-const NoteBookScreen: FunctionComponent<NoteBookScreenProps> = ({
-  navigation,
-}) => {
+const NoteBookDetailsScreen: FunctionComponent<NoteBookDetailsScreenProps> = ({}) => {
   return (
     <ScrollView style={styles.container_one}>
-      <Text style={styles.title}>Note Books</Text>
-
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate(NoteBookStackRouteList.NoteBookDetails);
-        }}
-        style={styles.header}>
-        <Text style={styles.titleHeader}>8</Text>
-        <View style={styles.innertext}>
-          <Text style={styles.notesTitle}>Notes Book created so far</Text>
-          <View style={styles.marginIcon}>
-            <Icon
-              name={'chevron-forward-circle-outline'}
-              color={colors.white}
-              size={28}
-            />
-          </View>
-        </View>
-      </TouchableOpacity>
+      <View style={styles.container_box}>
+        <Card number={8} tag={TagEnum.book} />
+        <Card number={50} tag={TagEnum.work} />
+        <Card number={3} tag={TagEnum.sport} />
+        <Card number={4} tag={TagEnum.code} />
+      </View>
 
       <View style={styles.recent}>
-        <Text style={styles.recentTitle}>Recently Created</Text>
+        <Text style={styles.recentTitle}>NoteBooks Created</Text>
       </View>
 
       <NoteBookCard
-        onPress={() =>
-          navigation.navigate(NoteBookStackRouteList.NoteBookSingle)
-        }
         title={
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'
         }
@@ -59,6 +41,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginTop: 20,
     backgroundColor: colors.backgroundColor,
+  },
+  container_box: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
   },
   title: {
     fontSize: 21,
@@ -105,14 +91,14 @@ const styles = StyleSheet.create({
   },
 });
 
-interface NoteBookScreenProps {
+interface NoteBookDetailsScreenProps {
   route: RouteProp<
     NoteBookStackParamList,
-    typeof NoteBookStackRouteList.NoteBook
+    typeof NoteBookStackRouteList.NoteBookDetails
   >;
   navigation: StackNavigationProp<
     NoteBookStackParamList,
-    typeof NoteBookStackRouteList.NoteBook
+    typeof NoteBookStackRouteList.NoteBookDetails
   >;
 }
-export default NoteBookScreen;
+export default NoteBookDetailsScreen;

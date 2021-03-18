@@ -1,47 +1,59 @@
 import React, {FunctionComponent} from 'react';
 
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import colors from '../../../utils/colors';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {NoteBookStackParamList, NoteBookStackRouteList} from '../constant';
 import {RouteProp} from '@react-navigation/native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {NoteCard} from '../../../components/noteCard';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {NoteBookCard} from '../../../components/noteBookCard';
 
-const NoteBookScreen: FunctionComponent<NoteBookScreenProps> = ({
+const NoteBookSingleScreen: FunctionComponent<NoteBookSingleScreenProps> = ({
   navigation,
 }) => {
   return (
     <ScrollView style={styles.container_one}>
-      <Text style={styles.title}>Note Books</Text>
-
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate(NoteBookStackRouteList.NoteBookDetails);
-        }}
-        style={styles.header}>
-        <Text style={styles.titleHeader}>8</Text>
-        <View style={styles.innertext}>
-          <Text style={styles.notesTitle}>Notes Book created so far</Text>
-          <View style={styles.marginIcon}>
-            <Icon
-              name={'chevron-forward-circle-outline'}
-              color={colors.white}
-              size={28}
-            />
-          </View>
+      <View style={styles.flexHeader}>
+        <Text style={styles.title}>Note Books</Text>
+        <View style={styles.flexHeader}>
+          <TouchableOpacity>
+            <Icon name={'pencil-outline'} color={colors.category} size={21} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.trash}>
+            <Icon name={'trash-outline'} color={colors.error} size={21} />
+          </TouchableOpacity>
         </View>
-      </TouchableOpacity>
-
-      <View style={styles.recent}>
-        <Text style={styles.recentTitle}>Recently Created</Text>
       </View>
 
-      <NoteBookCard
-        onPress={() =>
-          navigation.navigate(NoteBookStackRouteList.NoteBookSingle)
-        }
+      <View style={styles.header}>
+        <View style={styles.marginIcon}>
+          <Image
+            style={styles.image}
+            source={require('../../../assets/sport.png')}
+          />
+        </View>
+        <View style={styles.innertext}>
+          <Text style={styles.notesTitle}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam,
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.recent}>
+        <Text style={styles.recentTitle}>Notes under card</Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate(NoteBookStackRouteList.NoteAdd);
+          }}
+          style={styles.recentTitle}>
+          <Icon name={'add-circle'} color={colors.category} size={31} />
+        </TouchableOpacity>
+      </View>
+
+      <NoteCard
         title={
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'
         }
@@ -59,6 +71,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginTop: 20,
     backgroundColor: colors.backgroundColor,
+  },
+  container_box: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
   },
   title: {
     fontSize: 21,
@@ -91,28 +107,36 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   marginIcon: {
-    marginTop: 5,
+    marginTop: 10,
   },
   recent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 20,
   },
+  image: {
+    height: 30,
+    width: 30,
+  },
   recentTitle: {
     fontSize: 21,
     fontFamily: 'Raleway-Bold',
     marginTop: 20,
   },
+  flexHeader: {flexDirection: 'row', justifyContent: 'space-between'},
+  trash: {
+    marginLeft: 20,
+  },
 });
 
-interface NoteBookScreenProps {
+interface NoteBookSingleScreenProps {
   route: RouteProp<
     NoteBookStackParamList,
-    typeof NoteBookStackRouteList.NoteBook
+    typeof NoteBookStackRouteList.NoteBookSingle
   >;
   navigation: StackNavigationProp<
     NoteBookStackParamList,
-    typeof NoteBookStackRouteList.NoteBook
+    typeof NoteBookStackRouteList.NoteBookSingle
   >;
 }
-export default NoteBookScreen;
+export default NoteBookSingleScreen;
