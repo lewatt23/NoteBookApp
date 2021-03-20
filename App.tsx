@@ -7,8 +7,13 @@ import {GlobalizeProvider} from 'react-native-globalize';
 import './src/config/i18n';
 import colors from './src/utils/colors';
 import {localeValue} from './src/config/i18n';
+import {PersistGate} from 'redux-persist/integration/react';
+import {Provider} from 'react-redux';
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import configureStore from './src/config/redux';
+
+const {store, persistor} = configureStore();
 enableScreens();
 
 const AppT = () => {
@@ -29,7 +34,13 @@ const AppT = () => {
 };
 
 const App = () => {
-  return <AppT />;
+  return (
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <AppT />
+      </PersistGate>
+    </Provider>
+  );
 };
 
 export default App;
