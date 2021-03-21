@@ -11,7 +11,10 @@ import {
 import {NotesStack} from '../screens/Notes';
 import {NoteBookStack} from '../screens/NoteBook';
 import {Image, StyleSheet, TouchableOpacity} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {
+  getFocusedRouteNameFromRoute,
+  useNavigation,
+} from '@react-navigation/native';
 import {NoteBookStackRouteList} from '../screens/NoteBook/constant';
 
 const IconNameStackMap: {[index in keyof HomeBottomTabParamList]: string} = {
@@ -21,6 +24,14 @@ const IconNameStackMap: {[index in keyof HomeBottomTabParamList]: string} = {
 };
 
 const TabBottomNavigator = createBottomTabNavigator<HomeBottomTabParamList>();
+const setTabBarVisible = (route: any) => {
+  const routeName = String(getFocusedRouteNameFromRoute(route));
+  const hideOnScreens = ['NoteBookStack', 'NotesStack'];
+  if (hideOnScreens.indexOf(routeName) > -1) {
+    return false;
+  }
+  return true;
+};
 
 export const HomeBottomTab = () => {
   const navigations = useNavigation();
@@ -54,7 +65,9 @@ export const HomeBottomTab = () => {
             return (
               <TouchableOpacity
                 onPress={() => {
-                  navigations.navigate(NoteBookStackRouteList.NoteBookAdd);
+                  navigations.navigate(NoteBookStackRouteList.NoteBookAdd, {
+                    item: {},
+                  });
                 }}>
                 <Image
                   style={styles.image}
@@ -75,21 +88,21 @@ export const HomeBottomTab = () => {
       <TabBottomNavigator.Screen
         name={HomeBottomTabRouteList.NoteBookStack}
         options={(navigation: any) => ({
-          tabBarVisible: navigation.route?.state?.index > 0 ? false : true,
+          tabBarVisible: setTabBarVisible(navigation.route),
         })}
         component={NoteBookStack}
       />
       <TabBottomNavigator.Screen
         name={HomeBottomTabRouteList.CreatScreen}
         options={(navigation: any) => ({
-          tabBarVisible: navigation.route?.state?.index > 0 ? false : true,
+          tabBarVisible: setTabBarVisible(navigation.route),
         })}
         component={NoteBookStack}
       />
       <TabBottomNavigator.Screen
         name={HomeBottomTabRouteList.NotesStack}
         options={(navigation: any) => ({
-          tabBarVisible: navigation.route?.state?.index > 0 ? false : true,
+          tabBarVisible: setTabBarVisible(navigation.route),
         })}
         component={NotesStack}
       />
