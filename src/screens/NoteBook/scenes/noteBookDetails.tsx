@@ -1,37 +1,153 @@
-import React, {FunctionComponent} from 'react';
+import React, {Fragment, FunctionComponent, useEffect, useState} from 'react';
 
-import {StyleSheet, Text, View} from 'react-native';
+import {FlatList, ListRenderItem, StyleSheet, Text, View} from 'react-native';
 import colors from '../../../utils/colors';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {NoteBookStackParamList, NoteBookStackRouteList} from '../constant';
 import {RouteProp} from '@react-navigation/native';
-import {ScrollView} from 'react-native-gesture-handler';
 import {NoteBookCard} from '../../../components/noteBookCard';
 import {Card, TagEnum} from '../component/card';
+import {SelectAllNoteBooks} from '../reducer';
+import {useSelector} from 'react-redux';
+import {INoteBook} from '../types';
+import {useGlobalize} from 'react-native-globalize';
 
-const NoteBookDetailsScreen: FunctionComponent<NoteBookDetailsScreenProps> = ({}) => {
-  return (
-    <ScrollView style={styles.container_one}>
-      <View style={styles.container_box}>
-        <Card number={8} tag={TagEnum.book} />
-        <Card number={50} tag={TagEnum.work} />
-        <Card number={3} tag={TagEnum.sport} />
-        <Card number={4} tag={TagEnum.code} />
-      </View>
+interface ICount {
+  books: number;
+  work: number;
+  sport: number;
+  code: number;
+}
 
-      <View style={styles.recent}>
-        <Text style={styles.recentTitle}>NoteBooks Created</Text>
-      </View>
+const NoteBookDetailsScreen: FunctionComponent<NoteBookDetailsScreenProps> = ({
+  navigation,
+}) => {
+  const {formatMessage} = useGlobalize();
 
+  const notebooks = useSelector(SelectAllNoteBooks);
+  const [data, setData] = useState<INoteBook[]>([]);
+  const [selected, setSelected] = useState<TagEnum | string>('');
+  const [count, setCount] = useState<ICount>({
+    books: 0,
+    work: 0,
+    sport: 0,
+    code: 0,
+  });
+
+  useEffect(() => {
+    if (notebooks) {
+      setData(notebooks);
+      let subCount: ICount = {
+        books: 0,
+        work: 0,
+        sport: 0,
+        code: 0,
+      };
+      notebooks.forEach(item => {
+        if (item.tag === TagEnum.book) {
+          subCount.books++;
+        }
+        if (item.tag === TagEnum.sport) {
+          subCount.sport++;
+        }
+        if (item.tag === TagEnum.work) {
+          subCount.work++;
+        }
+        if (item.tag === TagEnum.code) {
+          subCount.code++;
+        }
+      });
+      setCount(subCount);
+    }
+  }, [notebooks]);
+
+  useEffect(() => {
+    if (notebooks && selected !== '') {
+      let sortData = notebooks.filter(item => item.tag === selected);
+
+      setData(sortData);
+    }
+  }, [selected, notebooks]);
+
+  const renderItem: ListRenderItem<INoteBook> = ({item}) => {
+    return (
       <NoteBookCard
-        title={
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'
+        onPress={() =>
+          navigation.navigate(NoteBookStackRouteList.NoteBookSingle, {
+            item: item,
+          })
         }
-        content={
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'
-        }
+        title={item.title}
+        content={item.description}
+        tag={item.tag}
       />
-    </ScrollView>
+    );
+  };
+
+  const renderHeader = () => {
+    return (
+      <Fragment>
+        <View style={styles.container_box}>
+          <Card
+            onPress={() => {
+              setSelected(TagEnum.book);
+            }}
+            number={count.books}
+            tag={TagEnum.book}
+          />
+          <Card
+            onPress={() => {
+              setSelected(TagEnum.work);
+            }}
+            number={count.work}
+            tag={TagEnum.work}
+          />
+          <Card
+            onPress={() => {
+              setSelected(TagEnum.sport);
+            }}
+            number={count.sport}
+            tag={TagEnum.sport}
+          />
+          <Card
+            onPress={() => {
+              setSelected(TagEnum.code);
+            }}
+            number={count.code}
+            tag={TagEnum.code}
+          />
+        </View>
+
+        <View style={styles.recent}>
+          <Text style={styles.recentTitle}>
+            {formatMessage('NoteBook/notebooks_created')}
+          </Text>
+        </View>
+      </Fragment>
+    );
+  };
+
+  const renderEmpty = () => {
+    return (
+      <View>
+        <Text style={styles.text}>
+          {' '}
+          {formatMessage('NoteBook/noteBook_title')}
+        </Text>
+      </View>
+    );
+  };
+  return (
+    <View style={styles.container_one}>
+      <FlatList
+        keyExtractor={it => it.id.toString()}
+        data={data}
+        numColumns={1}
+        renderItem={renderItem}
+        ListEmptyComponent={renderEmpty}
+        ListHeaderComponent={renderHeader}
+      />
+    </View>
   );
 };
 
@@ -48,7 +164,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 21,
-    fontFamily: 'Raleway-Bold',
+    fontFamily: 'Raleway-SemiBold',
   },
   header: {
     backgroundColor: colors.black,
@@ -62,7 +178,7 @@ const styles = StyleSheet.create({
   titleHeader: {
     fontSize: 32,
     color: colors.white,
-    fontFamily: 'Raleway-Bold',
+    fontFamily: 'Raleway-SemiBold',
   },
   innertext: {
     flexDirection: 'row',
@@ -86,8 +202,14 @@ const styles = StyleSheet.create({
   },
   recentTitle: {
     fontSize: 21,
-    fontFamily: 'Raleway-Bold',
+    fontFamily: 'Raleway-SemiBold',
     marginTop: 20,
+  },
+  text: {
+    fontSize: 18,
+    fontFamily: 'Raleway-Regular',
+    marginTop: 20,
+    textAlign: 'center',
   },
 });
 
