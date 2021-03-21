@@ -1,6 +1,11 @@
-import React, {FunctionComponent, useEffect, useState} from 'react';
+import React, {
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 
-import {StyleSheet, View} from 'react-native';
+import {Alert, StyleSheet, View} from 'react-native';
 import {Picker} from '@react-native-community/picker';
 import colors from '../../../utils/colors';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -10,9 +15,66 @@ import {ScrollView} from 'react-native-gesture-handler';
 import Button from '../../../components/Button';
 import Input, {InputArea} from '../../../components/Input';
 import {TagEnum} from '../component/card';
+import {SelectAllNote, SelectAllNoteBooks} from '../reducer';
+import {useDispatch, useSelector} from 'react-redux';
+import {INote, INoteBook} from '../types';
+import {noteAddAction, noteEditAction} from '../actions';
+import moment from 'moment';
 
-const NoteAddScreen: FunctionComponent<NoteAddScreenProps> = ({navigation}) => {
+const NoteAddScreen: FunctionComponent<NoteAddScreenProps> = ({
+  navigation,
+  route,
+}) => {
   const [selectedTag, setselectedTag] = useState<string | number>(TagEnum.book);
+  const [selectedParent, setselectedParent] = useState<string | number>();
+  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>('');
+  const {item, type} = route.params;
+
+  const dispatch = useDispatch();
+  const notebooks = useSelector(SelectAllNoteBooks);
+  const note = useSelector(SelectAllNote);
+
+  const createNoteBook = useCallback(() => {
+    if (title.length > 0 && content.length > 0) {
+      if (type === 'edit') {
+        const payload: INote = {
+          title,
+          description: content,
+          tag: String(selectedTag),
+          id: item ? item.id : 0,
+          pid: Number(selectedParent),
+          createdAt: moment().format('LL'),
+        };
+        dispatch(noteEditAction(payload));
+      } else {
+        const payload: INote = {
+          title,
+          description: content,
+          tag: String(selectedTag),
+          id: note ? note.length + 1 : 0,
+          pid: Number(selectedParent),
+          createdAt: moment().format('LL'),
+        };
+        dispatch(noteAddAction(payload));
+      }
+
+      navigation.navigate(NoteBookStackRouteList.NoteBookDetails);
+    } else {
+      Alert.alert('Enter title or content');
+    }
+  }, [
+    title,
+    content,
+    type,
+    navigation,
+    selectedTag,
+    item,
+    selectedParent,
+    dispatch,
+    note,
+  ]);
+
   useEffect(() => {
     navigation.setOptions({
       headerTitleStyle: {
@@ -22,15 +84,35 @@ const NoteAddScreen: FunctionComponent<NoteAddScreenProps> = ({navigation}) => {
 
       headerRight: () => (
         <View style={styles.marginButton}>
-          <Button onPress={() => {}}>Save note</Button>
+          <Button
+            onPress={() => {
+              createNoteBook();
+            }}>
+            {type && type === 'edit' ? 'Update Note' : 'Save Note'}
+          </Button>
         </View>
       ),
     });
-  }, [navigation]);
+  }, [createNoteBook, navigation, type]);
+
+  useEffect(() => {
+    if (item) {
+      setContent(item.description);
+      setTitle(item.title);
+      setselectedTag(item.tag);
+    }
+  }, [item]);
+
   return (
     <ScrollView style={styles.container_one}>
       <View style={styles.marginIcon}>
-        <Input placeholder="Enter the title" />
+        <Input
+          placeholder="Enter the title"
+          value={title}
+          onChange={(e: string) => {
+            setTitle(e);
+          }}
+        />
       </View>
       <View style={[styles.marginIcon, styles.searchSection_two]}>
         <Picker
@@ -46,19 +128,24 @@ const NoteAddScreen: FunctionComponent<NoteAddScreenProps> = ({navigation}) => {
       </View>
       <View style={[styles.marginIcon, styles.searchSection_two]}>
         <Picker
-          selectedValue={selectedTag}
+          selectedValue={selectedParent}
           mode={'dropdown'}
           onValueChange={itemValue => {
-            setselectedTag(itemValue);
+            setselectedParent(itemValue);
           }}>
-          <Picker.Item label={'Change notebook'} value={''} />
-          {Object.keys(TagEnum).map(key => (
-            <Picker.Item label={key} value={key} />
+          {notebooks.map((i: INoteBook) => (
+            <Picker.Item label={i.title} value={i.id} />
           ))}
         </Picker>
       </View>
       <View style={styles.marginIcon}>
-        <InputArea placeholder="Enter details" />
+        <InputArea
+          placeholder="Enter details"
+          value={content}
+          onChange={(e: string) => {
+            setContent(e);
+          }}
+        />
       </View>
     </ScrollView>
   );
@@ -77,7 +164,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 21,
-    fontFamily: 'Raleway-Bold',
+    fontFamily: 'Raleway-SemiBold',
   },
   header: {
     backgroundColor: colors.black,
@@ -91,7 +178,7 @@ const styles = StyleSheet.create({
   titleHeader: {
     fontSize: 32,
     color: colors.white,
-    fontFamily: 'Raleway-Bold',
+    fontFamily: 'Raleway-SemiBold',
   },
   innertext: {
     flexDirection: 'row',
@@ -119,7 +206,7 @@ const styles = StyleSheet.create({
   },
   recentTitle: {
     fontSize: 21,
-    fontFamily: 'Raleway-Bold',
+    fontFamily: 'Raleway-SemiBold',
     marginTop: 20,
   },
   flexHeader: {flexDirection: 'row', justifyContent: 'space-between'},
