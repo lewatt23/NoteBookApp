@@ -3,7 +3,11 @@ import {TouchableOpacity} from 'react-native';
 import {View, StyleSheet, Text, Image} from 'react-native';
 import colors from '../../../utils/colors';
 
-const Card: FunctionComponent<CardProps> = ({number, tag = TagEnum.work}) => {
+const Card: FunctionComponent<CardProps> = ({
+  number,
+  tag = TagEnum.work,
+  onPress,
+}) => {
   const renderImage = () => {
     switch (tag) {
       case TagEnum.work:
@@ -41,7 +45,7 @@ const Card: FunctionComponent<CardProps> = ({number, tag = TagEnum.work}) => {
   };
 
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <View>{renderImage()}</View>
       <View>
         <Text style={styles.title}>{number}</Text>
@@ -86,6 +90,7 @@ const styles = StyleSheet.create({
 interface CardProps {
   number: number;
   tag?: TagEnum;
+  onPress?: () => void;
 }
 
 export enum TagEnum {
