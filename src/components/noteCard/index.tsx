@@ -10,6 +10,8 @@ const NoteCard: FunctionComponent<NoteCardProps> = ({
   content,
   tag = 'work',
   onPress,
+  onEdit,
+  onDelete,
 }) => {
   const renderImage = () => {
     switch (tag) {
@@ -58,12 +60,16 @@ const NoteCard: FunctionComponent<NoteCardProps> = ({
       <View style={styles.flexHeader}>
         <View>{renderImage()}</View>
         <View style={[styles.flexHeader, styles.marginTop]}>
-          <TouchableOpacity>
-            <Icon name={'pencil-outline'} color={colors.category} size={21} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.trash}>
-            <Icon name={'trash-outline'} color={colors.error} size={21} />
-          </TouchableOpacity>
+          {onEdit && (
+            <TouchableOpacity onPress={onEdit}>
+              <Icon name={'pencil-outline'} color={colors.category} size={21} />
+            </TouchableOpacity>
+          )}
+          {onDelete && (
+            <TouchableOpacity onPress={onDelete} style={styles.trash}>
+              <Icon name={'trash-outline'} color={colors.error} size={21} />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </TouchableOpacity>
@@ -81,7 +87,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.white,
     paddingHorizontal: 10,
-    elevation: 2,
+    elevation: 0,
     marginHorizontal: 10,
   },
   image: {
@@ -92,7 +98,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     color: colors.black,
-    fontFamily: 'Raleway-Bold',
+    fontFamily: 'Raleway-SemiBold',
     marginBottom: 10,
   },
   content: {
@@ -111,8 +117,10 @@ const styles = StyleSheet.create({
 interface NoteCardProps {
   title: string;
   content: string;
-  tag?: TagEnum;
+  tag?: TagEnum | string;
   onPress?: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 enum TagEnum {

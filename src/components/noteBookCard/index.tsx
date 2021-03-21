@@ -5,51 +5,42 @@ import colors from '../../utils/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Truncate} from '../../utils';
 
+export const renderImage = (tag: TagEnum | string) => {
+  switch (tag) {
+    case TagEnum.work:
+      return (
+        <Image style={styles.image} source={require('../../assets/work.png')} />
+      );
+
+    case TagEnum.sport:
+      return (
+        <Image
+          style={styles.image}
+          source={require('../../assets/sport.png')}
+        />
+      );
+
+    case TagEnum.code:
+      return (
+        <Image style={styles.image} source={require('../../assets/code.png')} />
+      );
+
+    case TagEnum.book:
+      return (
+        <Image style={styles.image} source={require('../../assets/book.png')} />
+      );
+  }
+};
+
 const NoteBookCard: FunctionComponent<NoteBookCardProps> = ({
   title,
   content,
   tag = 'work',
   onPress,
 }) => {
-  const renderImage = () => {
-    switch (tag) {
-      case TagEnum.work:
-        return (
-          <Image
-            style={styles.image}
-            source={require('../../assets/work.png')}
-          />
-        );
-
-      case TagEnum.sport:
-        return (
-          <Image
-            style={styles.image}
-            source={require('../../assets/sport.png')}
-          />
-        );
-
-      case TagEnum.code:
-        return (
-          <Image
-            style={styles.image}
-            source={require('../../assets/code.png')}
-          />
-        );
-
-      case TagEnum.book:
-        return (
-          <Image
-            style={styles.image}
-            source={require('../../assets/book.png')}
-          />
-        );
-    }
-  };
-
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
-      <View>{renderImage()}</View>
+      <View>{renderImage(tag)}</View>
       <View>
         <Text style={styles.title}>{Truncate(title, 20)}</Text>
         <Text numberOfLines={1} style={styles.content}>
@@ -72,14 +63,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     marginTop: 10,
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     backgroundColor: colors.white,
     padding: 20,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: colors.white,
     paddingHorizontal: 1,
-    elevation: 2,
+    elevation: 0,
   },
   image: {
     height: 40,
@@ -99,7 +90,7 @@ const styles = StyleSheet.create({
 interface NoteBookCardProps {
   title: string;
   content: string;
-  tag?: TagEnum;
+  tag?: TagEnum | string;
   onPress?: () => void;
 }
 
