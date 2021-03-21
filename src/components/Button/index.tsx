@@ -93,7 +93,7 @@ interface ButtonProps {
   type?: string;
   outlinePrimary?: boolean;
   style?: ViewStyle;
-  children: React.ReactElement | string;
+  children?: React.ReactElement | string;
 }
 
 /**
