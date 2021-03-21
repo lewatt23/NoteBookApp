@@ -1,11 +1,22 @@
 import {NavigatorRouteList} from '../../navigation/constant.navigation';
+import {INoteBook} from './types';
 
 export type NoteBookStackParamList = {
   NoteBook: undefined;
   NoteBookDetails: undefined;
-  NoteBookSingle: undefined;
-  NoteBookAdd: undefined;
-  NoteAdd: undefined;
+  NoteBookSingle: {
+    item: INoteBook;
+  };
+  NoteBookAdd: {
+    item?: INoteBook;
+
+    type?: 'new' | 'edit';
+  };
+  NoteAdd: {
+    item?: INoteBook;
+
+    type?: 'new' | 'edit';
+  };
 };
 
 export const NoteBookStackRouteList: NavigatorRouteList<NoteBookStackParamList> = {
