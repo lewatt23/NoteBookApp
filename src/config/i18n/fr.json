@@ -2,5 +2,25 @@
   "Navigation": {
     "NotesStack": "Notes",
     "NoteBookStack": "Carnet de notes"
+  },
+  "NoteBook": {
+    "noteBook_title": "Aucun livre de notes n'a encore été créé !",
+    "noteBook_subtitle": "Livres de notes",
+    "noteBook_created": "Livre de notes créé à ce jour",
+    "noteBook_rCreated": "Récemment créé",
+    "notebooks_created": "Livres de notes créés",
+    "note_no": "Aucune note créée pour le moment !",
+    "note_created": "Notes créées",
+    "note_created_so": "Notes créées jusqu'à présent",
+    "note_updated": "Notes récemment mises à jour",
+    "note_under": "Note Under",
+    "sort_asc": "Tri ascendant",
+    "sort_dec": "Tri décroissant"
+  },
+  "Route": {
+    "NoteBooks": "Tous les livres de notes",
+    "NoteBookDetail": "Détails du livre de notes",
+    "NoteBookAdd": "Ajouter un nouveau carnet de notes",
+    "NoteAdd": " Ajouter une nouvelle note"
   }
 }
