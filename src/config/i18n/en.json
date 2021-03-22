@@ -1,0 +1,26 @@
+{
+  "Navigation": {
+    "NotesStack": "Notes",
+    "NoteBookStack": "NoteBook"
+  },
+  "NoteBook": {
+    "noteBook_title": "No Note book created yet!",
+    "noteBook_subtitle": "Note books",
+    "noteBook_created": "Notes Book created so far",
+    "noteBook_rCreated": "Recently Created",
+    "notebooks_created": "Note Books Created",
+    "note_no": "No Notes created yet!",
+    "note_created": "Notes created",
+    "note_created_so": "Notes created so far",
+    "note_updated": "Recently Updated",
+    "note_under": "Note Under",
+    "sort_asc": "Sort Ascending",
+    "sort_dec": "Sort Descending"
+  },
+  "Route": {
+    "NoteBooks": "All Note Books",
+    "NoteBookDetail": "Note Book Details",
+    "NoteBookAdd": "Add New Note Book",
+    "NoteAdd": "Add New Note"
+  }
+}
