@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This project repo contains the source code for the [ **BetaRemit - Front End Recruitment Challenge** ](https://gitlab.com/beta.remit/frontend-test/-/tree/master), which consisted of building a mobile application for managing notes.
+This project repo contains the source code(check dev branch) for the [ **BetaRemit - Front End Recruitment Challenge** ](https://gitlab.com/beta.remit/frontend-test/-/tree/master), which consisted of building a mobile application for managing notes.
 
 ## Stack and Library used
 
